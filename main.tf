@@ -14,32 +14,32 @@ data "helm_repository" "jetstack" {
 
 # List of CRDs required for cert-manager
 resource "k8sraw_yaml" "certificaterequests" {
-  depends_on = [var.crd_depends_on]
+  depends_on = [var.cm_depends_on]
   yaml_body = file("${path.module}/files/certificaterequests.yaml")
 }
 
 resource "k8sraw_yaml" "certificates" {
-  depends_on = [var.crd_depends_on]
+  depends_on = [var.cm_depends_on]
   yaml_body = file("${path.module}/files/certificates.yaml")
 }
 
 resource "k8sraw_yaml" "challenges" {
-  depends_on = [var.crd_depends_on]
+  depends_on = [var.cm_depends_on]
   yaml_body = file("${path.module}/files/challenges.yaml")
 }
 
 resource "k8sraw_yaml" "clusterissuers" {
-  depends_on = [var.crd_depends_on]
+  depends_on = [var.cm_depends_on]
   yaml_body = file("${path.module}/files/clusterissuers.yaml")
 }
 
 resource "k8sraw_yaml" "issuers" {
-  depends_on = [var.crd_depends_on]
+  depends_on = [var.cm_depends_on]
   yaml_body = file("${path.module}/files/issuers.yaml")
 }
 
 resource "k8sraw_yaml" "orders" {
-  depends_on = [var.crd_depends_on]
+  depends_on = [var.cm_depends_on]
   yaml_body = file("${path.module}/files/orders.yaml")
 }
 
@@ -55,7 +55,7 @@ resource "helm_release" "cert-manager" {
   name       = "cert-manager"
   repository = data.helm_repository.jetstack.metadata.0.name
   chart      = "cert-manager"
-  version    = "v0.11.0"
+  version    = var.cm_version
   namespace  = var.namespace
   wait       = true
 }
