@@ -65,7 +65,7 @@ resource "helm_release" "cert-manager" {
   name       = "cert-manager"
   repository = data.helm_repository.jetstack.metadata.0.name
   chart      = "cert-manager"
-  version    = "v.${var.cm_version}"
+  version    = "v.${var.cm_version}.0"
   namespace  = var.namespace
   wait       = true
 }
