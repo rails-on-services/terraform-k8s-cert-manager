@@ -9,12 +9,12 @@ data "http" "cert-manager-crd" {
 }
 
 data "kubectl_file_documents" "cert-manager-crd" {
-    content = data.http.cert-manager-crd.body
+  content = data.http.cert-manager-crd.body
 }
 
 resource "kubectl_manifest" "cert-manager-crd" {
-    count = length(data.kubectl_file_documents.cert-manager-crd.documents)
-    yaml_body = file(element(data.kubectl_file_documents.cert-manager-crd.documents, count.index))
+  count = length(data.kubectl_file_documents.cert-manager-crd.documents)
+  yaml_body = file(element(data.kubectl_file_documents.cert-manager-crd.documents, count.index))
 }
 
 # resource "k8sraw_yaml" "cert-manager-crd" {
@@ -65,7 +65,7 @@ resource "helm_release" "cert-manager" {
   name       = "cert-manager"
   repository = data.helm_repository.jetstack.metadata.0.name
   chart      = "cert-manager"
-  version    = "v.${var.cm_version}"
+  version    = "v${var.cm_version}.0"
   namespace  = var.namespace
   wait       = true
 }
