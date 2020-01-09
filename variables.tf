@@ -12,7 +12,7 @@ variable "namespace" {
 
 variable "cm_version" {
   type        = string
-  default     = "0.11" # "v0.11.0"
+  default     = "0.11"
   description = "Cert-manager version. NOTE: CRD files has to be generated manually accordingly to choosen version"
 }
 
