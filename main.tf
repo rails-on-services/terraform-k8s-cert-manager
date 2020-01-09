@@ -9,7 +9,7 @@ data "http" "cert-manager-crd" {
 }
 
 data "kubectl_file_documents" "cert-manager-crd" {
-  content = data.http.cert-manager-crd.body
+  content = file("${module.path}/files/00-crds.yml")
 }
 
 resource "kubectl_manifest" "cert-manager-crd" {
