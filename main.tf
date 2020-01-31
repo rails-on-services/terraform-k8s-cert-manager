@@ -7,6 +7,16 @@ data "helm_repository" "jetstack" {
 #   url = "https://raw.githubusercontent.com/jetstack/cert-manager/release-${var.cm_version}/deploy/manifests/00-crds.yaml"
 # }
 
+# data "kubectl_file_documents" "manifests" {
+#   content = data.http.cert-manager-crd.body
+# }
+
+# resource "kubectl_manifest" "cert-manager-crd" {
+#   depends_on = [var.cm_depends_on]
+#   for_each  = toset(data.kubectl_file_documents.manifests.documents)
+#   yaml_body = each.key
+# }
+
 data "kubectl_filename_list" "manifests" {
     pattern = "${path.module}/files/*.yaml"
 }
@@ -16,6 +26,7 @@ resource "kubectl_manifest" "cert-manager-crd" {
     for_each   = toset(data.kubectl_filename_list.manifests.matches)
     yaml_body  = file(each.key)
 }
+
 resource "helm_release" "cert-manager" {
   depends_on = [
     kubectl_manifest.cert-manager-crd
